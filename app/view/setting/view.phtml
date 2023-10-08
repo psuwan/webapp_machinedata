@@ -1,0 +1,88 @@
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <div class="card">
+                <div class="card-title px-4">
+                    Serial port
+                </div>
+                <div class="card-body">
+                    <?php
+                    // print_r($serport_params);
+                    // echo '<hr>';
+                    echo 'Port name  : ' . $serport_params['serport_name'];
+                    echo '<br>';
+                    echo 'Baud rate  : ' . $serport_params['serport_baud'];
+                    echo '<br>';
+                    echo 'data bit   : ' . $serport_params['serport_data'];
+                    echo '<br>';
+                    echo 'Parity bit : ' . $serport_params['serport_parity'];
+                    echo '<br>';
+                    echo 'Stop bit   : ' . $serport_params['serport_stop'];
+                    echo '<br>';
+                    ?>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <th>Alias</th>
+                            <th>ID</th>
+                            <th>Address</th>
+                            <th>Function</th>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($data_mod2rd as $mod2rd) : ?>
+                                <tr>
+                                    <td><?= $mod2rd['mod2rd_name']; ?></td>
+                                    <td><?= $mod2rd['mod2rd_id']; ?></td>
+                                    <td><?= $mod2rd['mod2rd_addr']; ?></td>
+                                    <td><?= '0x0' . $mod2rd['mod2rd_func']; ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+                <div class="card-body py-3">
+                    <button type="button" class="btn btn-sm btn-outline-success" onclick="genconffile()">Generate config file</button>
+                    <hr>
+                    <pre>
+                    <?php
+                    print_r($data_modrdconf);
+                    ?>
+                    </pre>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery3.7.0 -->
+<script src="plugins/jQuery3.7.0/jquery-3.7.0.min.js"></script>
+
+<script>
+    function genconffile() {
+        $.ajax({
+            url: 'ajaxfunc.php',
+            method: 'post',
+            data: {
+                process_name: 'genfileconf',
+            },
+            success: function(response) {
+                // Handle the response from the PHP file
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                console.error(error);
+            }
+        })
+    }
+</script>

@@ -1,0 +1,90 @@
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <div class="card p-3 border">
+                <div class="card-body">
+
+                    <label class="form-label">IP Address</label>
+                    <input type="text" id="id4inputtext_ipaddr" name="" class="form-control" placeholder="123.123.123.123" />
+
+
+                    <label class="form-label">Subnet</label>
+                    <input type="text" id="id4inputtext_subnet" name="" class="form-control" placeholder="255.255.255.0" />
+
+
+                    <label class="form-label">Gateway</label>
+                    <input type="text" id="id4inputtext_gateway" name="" class="form-control" placeholder="123.123.123.1" />
+
+                </div>
+                <div class="card-footter px-3">
+                    <div class="col d-flex justify-content-end">
+                        <button class="btn btn-info btn-sm" type="submit" onclick="set_serialcomm()">Save setting</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card"></div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery3.7.0 -->
+<script src="plugins/jQuery3.7.0/jquery-3.7.0.min.js"></script>
+
+<!-- Select2_4.0 -->
+<script src="plugins/select2_4.0/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.basic-select2').select2();
+    });
+</script>
+
+<script>
+    function validateIpAddress(ipAddress) {
+        // Create a regular expression to match a valid IP address
+        let regex = /^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$/;
+
+        // Return true if the IP address matches the regular expression, false otherwise
+        return regex.test(ipAddress);
+    }
+
+    let ipAddress = document.getElementById("id4inputtext_ipaddr");
+    let ipSubnet = document.getElementById("id4inputtext_subnet");
+    let ipGateway = document.getElementById("id4inputtext_gateway");
+
+    ipAddress.oninput = function() {
+        if (!validateIpAddress(this.value)) {
+            this.setCustomValidity("Invalid IP address");
+            this.style.color = "red";
+        } else {
+            this.setCustomValidity("");
+            this.style.color = "green";
+        }
+    };
+
+    ipSubnet.oninput = function() {
+        if (!validateIpAddress(this.value)) {
+            this.setCustomValidity("Invalid IP address");
+            this.style.color = "red";
+        } else {
+            this.setCustomValidity("");
+            this.style.color = "green";
+        }
+    };
+
+    ipGateway.oninput = function() {
+        if (!validateIpAddress(this.value)) {
+            this.setCustomValidity("Invalid IP address");
+            this.style.color = "red";
+        } else {
+            this.setCustomValidity("");
+            this.style.color = "green";
+        }
+    }
+</script>

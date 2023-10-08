@@ -1,0 +1,45 @@
+<ul class="sidebar-nav" id="sidebar-nav">
+
+    <!-- Home and Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link <?php if (get('page') != 'home') echo 'collapsed'; ?>" href="?page=home">
+            <i class="bi bi-grid"></i>
+            <span>Dashboard</span>
+        </a>
+    </li><!-- Home and Dashboard -->
+
+    <!-- End of setting -->
+    <li class="nav-item">
+        <a class="nav-link <?php if (get('page') != 'setting') echo 'collapsed'; ?>" data-bs-target="#icons-nav" data-bs-toggle="collapse" href="#">
+            <i class="bi bi-gear"></i><span>Setting</span><i class="bi bi-chevron-down ms-auto"></i>
+        </a>
+        <ul id="icons-nav" class="nav-content collapse <?php if (get('page') == 'setting') echo 'show'; ?>" data-bs-parent="#sidebar-nav">
+            <li>
+                <a href="?page=setting&action=view" class="<?php if (get('action') == 'view') echo 'active'; ?>">
+                    <i class="bi bi-circle"></i><span>View Parameter</span>
+                </a>
+            </li>
+            <li>
+                <a href="?page=setting&action=setcomm" class="<?php if (get('action') == 'setcomm') echo 'active'; ?>">
+                    <i class="bi bi-circle"></i><span>Serial Port</span>
+                </a>
+            </li>
+            <li>
+                <a href="?page=setting&action=setdata" class="<?php if (get('action') == 'setdata') echo 'active'; ?>">
+                    <i class="bi bi-circle"></i><span>Data Address</span>
+                </a>
+            </li>
+            <li>
+                <a href="?page=setting&action=setstatus" class="<?php if (get('action') == 'setstatus') echo 'active'; ?>">
+                    <i class="bi bi-circle"></i><span>Status Address</span>
+                </a>
+            </li>
+            <li>
+                <a href="?page=setting&action=setnetw" class="<?php if (get('action') == 'setnetw') echo 'active'; ?>">
+                    <i class="bi bi-circle"></i><span>Network</span>
+                </a>
+            </li>
+        </ul>
+    </li><!-- End of setting -->
+
+</ul>

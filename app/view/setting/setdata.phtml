@@ -1,0 +1,279 @@
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <div class="card p-3 border">
+                <div class="card-body">
+                    <label for="id4inputnumber_modbusid" class="mt-1">Modbus ID</label>
+                    <input type="number" name="" id="id4inputnumber_modbusid" class="form-control" value="1" readonly>
+
+                    <label for="id4inputselect_modbusfunction">Read Function</label>
+                    <select name="" id="id4inputselect_modbusfunction" class="form-control basic-select2">
+                        <option value="1">Read Coil (0x01)</option>
+                        <option value="3" selected>Read Holding Registers (0x03)</option>
+                        <option value="4">Read Input Registers (0x04)</option>
+                    </select>
+
+                    <label class="mt-1" for="id4inputnumber_modaddr">Modbus Address</label>
+                    <input type="number" name="" id="id4inputnumber_modaddr" class="form-control" required onchange="inpset_modaddr(this.value)" onkeyup="inpset_modaddr(this.value)" value="0">
+
+                    <label for="id4inputnumber_numregister" class="mt-1">Number Register</label>
+                    <input type="number" name="" id="id4inputnumber_numregister" class="form-control" value="1">
+
+                    <label for="id4inputtext_modaddrname" class="mt-1">Modbus Name</label>
+                    <input type="text" name="" id="id4inputtext_modaddrname" class="form-control" required onkeyup="inpset_modname(this.value)" value="Name">
+
+                    <label for="id4inputtext_modreference" class="mt-1">Reference</label>
+                    <input type="text" name="" id="id4inputtext_modreference" class="form-control text-secondary" readonly value="<?= date('YmdHis'); ?>">
+
+                </div>
+                <div class="card-footter px-3">
+                    <div class="col d-flex justify-content-end">
+                        <button id="id4button_saveaddr" type="submit" class="btn btn-sm btn-outline-info" onclick="callfunc_setmodaddr()">Save Address</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-8">
+            <div class="card p-3 border">
+                <div class="table-responsive" id="id4divtable_modaddr2rd">
+                    <table class="table table-hover datatable" id="_id4table_modaddr2rd">
+                        <thead>
+                            <th>Modbus ID</th>
+                            <th>Modbus Function</th>
+                            <th>Modbus Address</th>
+                            <th>Modbus Alias Name</th>
+                            <th></th>
+                        </thead>
+                        <tbody>
+                            <?php foreach ($data_mod2rd as $mod2rd) : ?>
+                                <tr>
+                                    <td class="text-end px-2"><?= $mod2rd['mod2rd_id']; ?></td>
+                                    <td class="text-center"><?= '0x0' . $mod2rd['mod2rd_func']; ?></td>
+                                    <td class="text-end"><?= $mod2rd['mod2rd_addr']; ?></td>
+                                    <td class="px-4"><?= $mod2rd['mod2rd_name']; ?></td>
+                                    <td>
+                                        <a href="?page=setting&action=setdata&mod2rd_reference=<?= $mod2rd['mod2rd_reference']; ?>&command=edit"><i class="bi bi-pencil text-warning"></i></a>
+                                        <a href="?page=setting&action=setdata&mod2rd_reference=<?= $mod2rd['mod2rd_reference']; ?>&command=delete"><i class="bi bi-trash text-danger"></i></a>
+                                    </td>
+                                </tr>
+
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery3.7.0 -->
+<script src="plugins/jQuery3.7.0/jquery-3.7.0.min.js"></script>
+
+<!-- Select2_4.0 -->
+<script src="plugins/select2_4.0/select2.min.js"></script>
+<script>
+    let modbus_id = document.getElementById("id4inputnumber_modbusid");
+    let modbus_funccode = document.getElementById("id4inputselect_modbusfunction");
+    let modbus_address = document.getElementById("id4inputnumber_modaddr");
+    let modbus_numregis = document.getElementById("id4inputnumber_numregister");
+    let modbus_addrname = document.getElementById("id4inputtext_modaddrname");
+    let modbus_reference = document.getElementById("id4inputtext_modreference");
+    let modbus_savebtn = document.getElementById("id4button_saveaddr");
+
+    $(document).ready(function() {
+        $('.basic-select2').select2();
+
+        if ((modbus_address.value == '') || (modbus_addrname.value == '')) {
+            modbus_savebtn.setAttribute("disabled", "disabled");
+        }
+    });
+</script>
+
+<script>
+    function onlyLettersAndNumbers(str) {
+        return /^[A-Za-z0-9_]*$/.test(str);
+    }
+
+    function inpset_modaddr(modaddr) {
+
+        if (modaddr < 0) {
+            alert('Value must 0 or more');
+            modbus_address.value = "0";
+        }
+
+        $.ajax({
+            url: 'ajaxfunc.php',
+            method: 'post',
+            data: {
+                process_name: 'chkdup_modaddr',
+                read_modaddr: modbus_address.value,
+                table_readmod: 'tbl_mod2rd',
+            },
+            success: function(response) {
+                // Handle the response from the PHP file
+                console.log(response);
+                if (response > 0) {
+                    alert('Dupplicated read address..!');
+                    modbus_address.value = "";
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                console.error(error);
+            }
+        });
+
+        if (modaddr != '') {
+            if (modbus_addrname != '') {
+                modbus_savebtn.removeAttribute("disabled");
+            }
+        } else {
+            modbus_savebtn.setAttribute("disabled", "disabled");
+        }
+
+    }
+
+    function inpset_modname(modname) {
+
+        if (onlyLettersAndNumbers(modname) == false) {
+            alert('Name allow only Englis characters and Number');
+            modbus_addrname.value = modbus_addrname.value.substr(0, modbus_addrname.value.length - 1);
+        }
+
+        $.ajax({
+            url: 'ajaxfunc.php',
+            method: 'post',
+            data: {
+                process_name: 'chkdup_modname',
+                read_modname: modbus_addrname.value,
+                table_readmod: 'tbl_mod2rd',
+            },
+            success: function(response) {
+                // Handle the response from the PHP file
+                console.log(response);
+                if (response > 0) {
+                    alert('Dupplicated read name..!');
+                    modbus_addrname.value = "";
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                console.error(error);
+            }
+        });
+
+        if (modname != '') {
+            if (modbus_address != '') {
+                modbus_savebtn.removeAttribute("disabled");
+            }
+        } else {
+            modbus_savebtn.setAttribute("disabled", "disabled");
+        }
+    }
+</script>
+
+<script>
+    function callfunc_setmodaddr() {
+        $.ajax({
+            url: 'ajaxfunc.php',
+            method: 'post',
+            data: {
+                process_name: 'set_modaddr',
+                read_modbusid: modbus_id.value,
+                read_funccode: modbus_funccode.value,
+                read_modaddr: modbus_address.value,
+                read_numregis: modbus_numregis.value,
+                read_addrname: modbus_addrname.value,
+                read_modref: modbus_reference.value,
+                table_readmod: 'tbl_mod2rd',
+            },
+            success: function(response) {
+                // Handle the response from the PHP file
+                console.log(response);
+                if (response == 0) {
+                    alert('Data enter error [dupplicated value]');
+                } else {
+                    $("#id4divtable_modaddr2rd").load(location.href + " #id4divtable_modaddr2rd");
+                }
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                console.error(error);
+            }
+        });
+    }
+</script>
+
+<!-- Datatable.net -->
+<script src="https://cdn.datatables.net/1.11.1/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.0/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.32/vfs_fonts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.0.0/js/buttons.print.min.js"></script>
+<script>
+    $("#id4table_modaddr2rd").DataTable({
+        dom: 'Blfrtip',
+        buttons: ['copy', 'excel', {
+                extend: "print",
+                text: "Print",
+                customize: function(win) {
+                    var last = null;
+                    var current = null;
+                    var bod = [];
+
+                    var css = '@page { size: landscape; }',
+                        head = win.document.head || win.document.getElementsByTagName('head')[0],
+                        style = win.document.createElement('style');
+
+                    style.type = 'text/css';
+                    style.media = 'print';
+
+                    if (style.styleSheet) {
+                        style.styleSheet.cssText = css;
+                    } else {
+                        style.appendChild(win.document.createTextNode(css));
+                    }
+
+                    head.appendChild(style);
+                }
+            }
+            /*, {
+                            extend: 'pdfHtml5',
+                            orientation: 'landscape',
+                            pageSize: 'A4'
+                        }*/
+        ],
+        "order": [
+            [2, "asc"]
+        ],
+        language: {
+            "decimal": "",
+            "emptyTable": "No record",
+            "info": "Showing _START_ To _END_ from _TOTAL_ entries",
+            "infoEmpty": "Showing 0 to 0 of 0 entries",
+            "infoFiltered": "(filtered from _MAX_ total entries)",
+            "infoPostFix": "",
+            "thousands": ",",
+            "lengthMenu": "Show _MENU_ Entries",
+            "loadingRecords": "Loading...",
+            "processing": "Processing...",
+            "search": "",
+            "searchPlaceholder": "Search in table",
+            "zeroRecords": "No matching record found",
+            "paginate": {
+                "first": "First",
+                "last": "Last",
+                "next": "Next",
+                "previous": "Previous"
+            },
+            "aria": {
+                "sortAscending": ": activate to sort column ascending",
+                "sortDescending": ": activate to sort column descending"
+            }
+        }
+    });
+</script>

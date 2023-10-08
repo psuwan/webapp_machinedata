@@ -1,0 +1,244 @@
+<?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
+?>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <title><?= get('page', 'home'); ?> - Machine's Data</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+    <!-- <link href="assets/niceadmin/img/favicon.png" rel="icon">
+    <link href="assets/niceadmin/img/apple-touch-icon.png" rel="apple-touch-icon"> -->
+    <link href="assets/images/logo-apks-25-sq.png" rel="icon">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="assets/niceadmin/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/niceadmin/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/niceadmin/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/niceadmin/vendor/quill/quill.snow.css" rel="stylesheet">
+    <link href="assets/niceadmin/vendor/quill/quill.bubble.css" rel="stylesheet">
+    <link href="assets/niceadmin/vendor/remixicon/remixicon.css" rel="stylesheet">
+    <link href="assets/niceadmin/vendor/simple-datatables/style.css" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="assets/niceadmin/css/style.css" rel="stylesheet">
+
+    <!-- Select2 -->
+    <link rel="stylesheet" href="plugins/select2_4.0/select2.min.css">
+
+    <!-- Datatables.net -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.11.1/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.0.0/css/buttons.dataTables.min.css">
+    <style>
+        .textIBM {
+            font-family: 'IBM Plex Sans Thai Looped', sans-serif;
+        }
+
+        .select2-selection__rendered {
+            line-height: 34px !important;
+        }
+
+        .select2-container .select2-selection--single {
+            height: 39px !important;
+        }
+
+        .select2-selection__arrow {
+            height: 34px !important;
+        }
+
+        .mobile-nav-toggle {
+            color: #7cb0d7 !important;
+        }
+
+        .dt-button,
+        .paginate_button {
+            height: 30px !important;
+            padding: 0.25em 1em !important;
+            border-radius: 5px !important;
+        }
+
+        .dataTables_length select,
+        .dataTables_filter input {
+            height: 30px !important;
+        }
+
+        breadcrumbs,
+        .inner-page {
+            padding: 10px 0px !important;
+        }
+
+        #load {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            z-index: 9999;
+            /* background: url("https://my.lawsociety.com.au/mylsportal/images/loader.gif") no-repeat center center rgba(0, 0, 0, 0.1) */
+            background: url("imgs/generals/loading-eclipse.gif") no-repeat center center rgba(0, 0, 0, 0.1)
+        }
+
+        /* datalist as select2 */
+        /* Style the input field */
+        #myInput {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* Style the datalist dropdown */
+        #myInput::-webkit-calendar-picker-indicator {
+            display: none;
+        }
+
+        #myInput::-webkit-datetime-edit-text {
+            display: none;
+        }
+
+        #myInput::-webkit-datetime-edit-fields-wrapper {
+            display: none;
+        }
+
+        #myInput::-webkit-inner-spin-button {
+            display: none;
+        }
+
+        #myInput::-webkit-clear-button {
+            display: none;
+        }
+
+        #myInput::-ms-clear {
+            display: none;
+        }
+
+        /* Style the datalist options */
+        #myList option {
+            padding: 8px;
+        }
+
+        .fixed-column {
+            width: 25px;
+        }
+    </style>
+
+    <!-- =======================================================
+  * Template Name: NiceAdmin
+  * Updated: Jul 27 2023 with Bootstrap v5.3.1
+  * Template URL: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/
+  * Author: BootstrapMade.com
+  * License: https://bootstrapmade.com/license/
+  ======================================================== -->
+</head>
+
+<body>
+
+    <!-- ======= Header ======= -->
+    <header id="header" class="header fixed-top d-flex align-items-center">
+
+        <div class="d-flex align-items-center justify-content-between">
+            <a href="index.html" class="logo d-flex align-items-center">
+                <!-- <img src="assets/niceadmin/img/logo.png" alt=""> -->
+                <img src="assets/images/logo-apks-25.png" alt="">
+                <span class="d-none d-lg-block">Machine Data</span>
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        </div><!-- End Logo -->
+
+        <!-- Search Bar -->
+        <!-- <div class="search-bar">
+            <form class="search-form d-flex align-items-center" method="POST" action="#">
+                <input type="text" name="query" placeholder="Search" title="Enter search keyword">
+                <button type="submit" title="Search"><i class="bi bi-search"></i></button>
+            </form>
+        </div> -->
+        <!-- End Search Bar -->
+
+        <nav class="header-nav ms-auto">
+            <?php
+            include_once 'menu_navbar.phtml';
+            ?>
+        </nav><!-- End Icons Navigation -->
+
+    </header><!-- End Header -->
+
+    <!-- ======= Sidebar ======= -->
+    <aside id="sidebar" class="sidebar">
+
+        <?php
+        include_once 'menu_sidebar.phtml';
+        ?>
+
+    </aside><!-- End Sidebar-->
+
+    <main id="main" class="main">
+
+        <div class="pagetitle">
+            <h1><?= get('page', 'dashboard'); ?></h1>
+            <nav>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="./">Home</a></li>
+                    <?php if (get('action') != '') : ?>
+                        <li class="breadcrumb-item"><?= get('page'); ?></li>
+                        <li class="breadcrumb-item active"><?= get('action'); ?></li>
+                    <?php endif; ?>
+                    <?php if (get('action') == '') : ?>
+                        <li class="breadcrumb-item active"><?= get('page'); ?></li>
+                    <?php endif; ?>
+
+                </ol>
+            </nav>
+        </div><!-- End Page Title -->
+
+        <?php
+        include_once $main_content;
+        ?>
+
+    </main><!-- End #main -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="copyright">
+            &copy; Copyright <strong><span>NiceAdmin</span></strong>. All Rights Reserved
+        </div>
+        <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/nice-admin-bootstrap-admin-html-template/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a><br>
+            Used by <a href="mailto:psuwan@apks-software.com">Pattanapong Suwan</a>
+
+        </div>
+    </footer><!-- End Footer -->
+
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+    <!-- Vendor JS Files -->
+    <script src="assets/niceadmin/vendor/apexcharts/apexcharts.min.js"></script>
+    <script src="assets/niceadmin/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="assets/niceadmin/vendor/chart.js/chart.umd.js"></script>
+    <script src="assets/niceadmin/vendor/echarts/echarts.min.js"></script>
+    <script src="assets/niceadmin/vendor/quill/quill.min.js"></script>
+    <script src="assets/niceadmin/vendor/simple-datatables/simple-datatables.js"></script>
+    <script src="assets/niceadmin/vendor/tinymce/tinymce.min.js"></script>
+    <script src="assets/niceadmin/vendor/php-email-form/validate.js"></script>
+
+    <!-- Template Main JS File -->
+    <script src="assets/niceadmin/js/main.js"></script>
+
+
+</body>
+
+</html>

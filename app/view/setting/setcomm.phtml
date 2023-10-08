@@ -1,0 +1,113 @@
+<div class="container">
+    <div class="row">
+        <div class="col-4">
+            <div class="card p-3 border">
+                <div class="card-body">
+                    <label for="id4inputselect_serialport">Serial Port</label>
+                    <select name="" id="id4inputselect_serialport" class="form-control basic-select2">
+                        <?php foreach ($ports as $port) : ?>
+                            <option value="<?= $port['portName']; ?>"><?= $port['portName']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <label class="mt-1" for="id4inputselect_baudrate">Baud Rate</label>
+                    <select name="" id="id4inputselect_baudrate" class="form-control basic-select2">
+                        <option value="9600">9600</option>
+                        <option value="57600">57600</option>
+                        <option value="115200">115200</option>
+                    </select>
+
+                    <label class="mt-1" for="id4inputselect_data">Data</label>
+                    <select name="" id="id4inputselect_data" class="form-control basic-select2">
+                        <option value="8">8</option>
+                        <option value="7">7</option>
+                        <option value="6">6</option>
+                        <option value="5">5</option>
+                        <option value="4">4</option>
+                    </select>
+
+                    <label class="mt-1" for="id4inputselect_parity">Data</label>
+                    <select name="" id="id4inputselect_parity" class="form-control basic-select2">
+                        <option value="None">None</option>
+                        <option value="Even">Even</option>
+                        <option value="Odd">Odd</option>
+                        <option value="Space">Space</option>
+                        <option value="Mark">Mark</option>
+                    </select>
+
+                    <label class="mt-1" for="id4inputselect_stop">Data</label>
+                    <select name="" id="id4inputselect_stop" class="form-control basic-select2">
+                        <option value="1">1</option>
+                        <option value="1.5">1.5</option>
+                        <option value="2">2</option>
+                    </select>
+
+                    <label class="mt-1" for="id4inputselect_flowctrl">Data</label>
+                    <select name="" id="id4inputselect_flowctrl" class="form-control basic-select2">
+                        <option value="None">None</option>
+                        <option value="Xon/Xoff">Xon/Xoff</option>
+                        <option value="Hardware">Hardware</option>
+                    </select>
+
+                </div>
+                <div class="card-footter px-3">
+                    <div class="col d-flex justify-content-end">
+                        <button class="btn btn-info btn-sm" type="submit" onclick="set_serialcomm()">Save setting</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card">
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card"></div>
+        </div>
+    </div>
+</div>
+
+
+<!-- jQuery3.7.0 -->
+<script src="plugins/jQuery3.7.0/jquery-3.7.0.min.js"></script>
+
+<!-- Select2_4.0 -->
+<script src="plugins/select2_4.0/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.basic-select2').select2();
+    });
+</script>
+
+<script>
+    let commport_name = document.getElementById("id4inputselect_serialport");
+    let commport_baud = document.getElementById("id4inputselect_baudrate");
+    let commport_data = document.getElementById("id4inputselect_data");
+    let commport_parity = document.getElementById("id4inputselect_parity");
+    let commport_stop = document.getElementById("id4inputselect_stop");
+    let commport_flow = document.getElementById("id4inputselect_flowctrl");
+
+    function set_serialcomm() {
+        $.ajax({
+            url: 'ajaxfunc.php',
+            method: 'post',
+            data: {
+                process_name: 'set_comm',
+                serport_name: commport_name.value,
+                serport_baud: commport_baud.value,
+                serport_data: commport_data.value,
+                serport_parity: commport_parity.value,
+                serport_stop: commport_stop.value,
+                serport_flow: commport_flow.value,
+            },
+            success: function(response) {
+                // Handle the response from the PHP file
+                console.log(response);
+            },
+            error: function(xhr, status, error) {
+                // Handle any errors that occur during the AJAX request
+                console.error(error);
+            }
+        });
+    }
+</script>
